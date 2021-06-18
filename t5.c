@@ -25,7 +25,7 @@
 /* Representação de uma aresta do grafo. */
 typedef struct aresta {
     uint16_t A, B;  // computadores
-    uint8_t W;      // custo da conexão
+    uint16_t W;     // custo da conexão
 } aresta_t;
 
 /* Representação de uma aresta do grafo. */
@@ -63,7 +63,7 @@ grafo_t *ler_grafo(unsigned N, unsigned M) {
         // EOF não é considerado erro
         if unlikely(rv < 0) return grafo;
         // mas a aresta deve ser válida
-        if unlikely(rv < 3 || A >= N || B >= N || W > UINT8_MAX) {
+        if unlikely(rv < 3 || A >= N || B >= N || W > UINT16_MAX) {
             free(grafo);
             return NULL;
         }
