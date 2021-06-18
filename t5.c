@@ -124,7 +124,7 @@ static inline attribute(nonnull, hot, nothrow)
  */
 void uniao(conj_t conj, unsigned a, unsigned b) {
     // sempre usa 'a' como o menor
-    if unlikely(b < a) {
+    if (b < a) {
         unsigned x = b;
         b = a; a = x;
     }
@@ -132,7 +132,8 @@ void uniao(conj_t conj, unsigned a, unsigned b) {
     bool *ca = conj.elem + (a * conj.tam);
     bool *cb = conj.elem + (b * conj.tam);
     // para cada elemento de 'b'
-    for (unsigned i = 0; i < conj.tam; i++) {
+    unsigned tam = conj.tam;
+    for (unsigned i = 0; i < tam; i++) {
         if (cb[i]) {
             // insere em 'a'
             ca[i] = true;
@@ -153,8 +154,9 @@ size_t kruskal(const grafo_t *restrict rede, unsigned max, conj_t conj) {
     if unlikely(arvores == max) return 0;
 
     size_t custo = 0;
+    unsigned M = rede->M;
     // assume as arestas já ordernadas
-    for (unsigned e = 0; e < rede->M; e++) {
+    for (unsigned e = 0; e < M; e++) {
         aresta_t a = rede->E[e];
         // acessa o conjnto de A e B
         unsigned ca = conj.pos[a.A];
@@ -199,22 +201,23 @@ void quicksort(aresta_t aresta[], unsigned hi) {
 static inline attribute(pure, nonnull, hot, nothrow)
 /* Custo da rede */
 size_t custo_total(grafo_t *rede, unsigned K) {
+    unsigned N = rede->N;
     if unlikely(rede->M == 0) {
-        return (K == rede->N)? 0 : SIZE_MAX;
+        return (K == N)? 0 : SIZE_MAX;
     }
     // alocação dos conjuntos
-    uint16_t *pos = malloc(rede->N * sizeof(uint16_t));
+    uint16_t *pos = malloc(N * sizeof(uint16_t));
     if unlikely(pos == NULL) return SIZE_MAX;
-    bool *elem = calloc(rede->N * rede->N, sizeof(bool));
+    bool *elem = calloc(N * N, sizeof(bool));
     if unlikely(elem == NULL) {
         free(pos);
         return SIZE_MAX;
     }
     // prepara o conjunto inicial de cada nó
-    conj_t conj = { .tam = rede->N, .pos = pos, .elem = elem };
-    for (unsigned i = 0; i < rede->N; i++) {
+    conj_t conj = { .tam = N, .pos = pos, .elem = elem };
+    for (unsigned i = 0; i < N; i++) {
         pos[i] = i;
-        elem[i * (conj.tam + 1)] = true;
+        elem[i * (N + 1)] = true;
     }
     // ordenação das arestas
     quicksort(rede->E, rede->M - 1);
