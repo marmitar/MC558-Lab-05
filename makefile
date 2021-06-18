@@ -1,11 +1,11 @@
-CC ?= gcc
-PROG ?= t5
+CC = gcc
+PROG = t5
 
 OPTIM   = -O3 -march=native -mtune=native -pipe -fivopts
 OPTIM  += -fmodulo-sched -flto -fwhole-program -fno-plt
-CFLAGS ?= -std=c99 -Wall -Werror -Wpedantic -Wunused-result $(OPTIM)
+CFLAGS = -std=c99 -Wall -Werror -Wpedantic -Wunused-result $(OPTIM)
 
-VGFLAGS ?= --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=10
+VGFLAGS = --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --error-exitcode=10
 
 
 .PHONY: all clean debug run
