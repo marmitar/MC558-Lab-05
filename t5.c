@@ -175,6 +175,9 @@ size_t kruskal(const grafo_t *restrict rede, unsigned max, conj_t conj) {
 }
 
 static attribute(nonnull, hot, nothrow)
+/**
+ * Ordenação das arestas por peso.
+ */
 void quicksort(aresta_t aresta[], unsigned hi) {
     // particiona o vetor
     aresta_t pivo = aresta[hi];
