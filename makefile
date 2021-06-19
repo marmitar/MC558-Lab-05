@@ -22,20 +22,10 @@ run: main
 	valgrind $(VGFLAGS) ./$<
 
 test: main
-	@for arq in $$(ls tests/*.in); do \
-		./$< <$$arq | diff -qs - $$(echo $$arq | sed s/.in/.out/g); \
-	done
+	fish runtest.fish
 
 memcheck: main
-	@for arq in $$(ls tests/*.in); do \
-		logfile=$$(echo $$arq | sed s-tests/--g | sed s/.in/.valgrind/g); \
-		valgrind $(VGFLAGS) ./$< <$$arq &> $$logfile; \
-		if [ $$? -eq 10 ]; then \
-			echo $$arq ERROR; \
-		else \
-			echo $$arq OK; \
-		fi \
-	done
+	fish valgrind.fish
 
 clean:
 	rm -f main *.valgrind vgcore.*
