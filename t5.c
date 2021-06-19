@@ -1,5 +1,5 @@
 /**
- * MC558 - Teste 04
+ * MC558 - Teste 05
  * Tiago de Paula - RA 187679
  */
 
@@ -80,9 +80,9 @@ static inline
  *  Cálculo do custo total para a rede de entrada,
  * respeitando os k clusters.
  *
- * Retorna SIZE_MAX em caso de erro;
+ * Retorna UINT64_MAX em caso de erro;
  */
-size_t custo_total(grafo_t *rede, unsigned K)
+uint64_t custo_total(grafo_t *rede, unsigned K)
 attribute(pure, nonnull, hot, nothrow);
 
 int main(void) {
@@ -94,9 +94,9 @@ int main(void) {
     grafo_t *grafo = ler_grafo(N, M);
     if unlikely(grafo == NULL) return EXIT_FAILURE;
     // cálculo do custo
-    size_t custo = custo_total(grafo, K);
+    uint64_t custo = custo_total(grafo, K);
     free(grafo);
-    if unlikely(custo == SIZE_MAX) return EXIT_FAILURE;
+    if unlikely(custo == UINT64_MAX) return EXIT_FAILURE;
     // exibição do resultado
     printf("%zu\n", custo);
     return EXIT_SUCCESS;
@@ -147,13 +147,13 @@ static inline attribute(nonnull, hot, nothrow)
  *  Algoritmo de Kruskal modificado que encerra quando
  * a floresta é reduzida para 'max' árvores.
  */
-size_t kruskal(const grafo_t *restrict rede, unsigned max, conj_t conj) {
+uint64_t kruskal(const grafo_t *restrict rede, unsigned max, conj_t conj) {
     unsigned arvores = conj.tam;
     // checa se o limite já foi alcançado
-    if unlikely(arvores < max) return SIZE_MAX;
+    if unlikely(arvores < max) return UINT64_MAX;
     if unlikely(arvores == max) return 0;
 
-    size_t custo = 0;
+    uint64_t custo = 0;
     unsigned M = rede->M;
     // assume as arestas já ordernadas
     for (unsigned e = 0; e < M; e++) {
@@ -203,18 +203,18 @@ void quicksort(aresta_t aresta[], unsigned hi) {
 
 static inline attribute(pure, nonnull, hot, nothrow)
 /* Custo da rede */
-size_t custo_total(grafo_t *rede, unsigned K) {
+uint64_t custo_total(grafo_t *rede, unsigned K) {
     unsigned N = rede->N;
     if unlikely(rede->M == 0) {
-        return (K == N)? 0 : SIZE_MAX;
+        return (K == N)? 0 : UINT64_MAX;
     }
     // alocação dos conjuntos
     uint16_t *pos = malloc(N * sizeof(uint16_t));
-    if unlikely(pos == NULL) return SIZE_MAX;
+    if unlikely(pos == NULL) return UINT64_MAX;
     bool *elem = calloc(N * N, sizeof(bool));
     if unlikely(elem == NULL) {
         free(pos);
-        return SIZE_MAX;
+        return UINT64_MAX;
     }
     // prepara o conjunto inicial de cada nó
     conj_t conj = { .tam = N, .pos = pos, .elem = elem };
@@ -225,7 +225,7 @@ size_t custo_total(grafo_t *rede, unsigned K) {
     // ordenação das arestas
     quicksort(rede->E, rede->M - 1);
     // cálculo por Kruskal
-    size_t custo = kruskal(rede, K, conj);
+    uint64_t custo = kruskal(rede, K, conj);
     free(pos);
     free(elem);
     return custo;
