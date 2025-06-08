@@ -1,6 +1,7 @@
-# MC558 - Tarefa 5
+# Análise de Algoritmos II (MC558) - Tarefa 5
 
-[Enunciado em PDF](enunc.pdf).
+- [Enunciado](./enunc.pdf)
+- [Solução](./t5.c)
 
 ## Problema
 
